@@ -1,0 +1,212 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/crate/1.1"
+      }
+    },
+    {
+      "@id": "./",
+      "@type": [
+        "Dataset",
+        "SoftwareSourceCode",
+        "ComputationalWorkflow"
+      ],
+      "creator": [
+        {
+          "@id": "#author"
+        }
+      ],
+      "dateCreated": "2025-03-19",
+      "description": "Differential expression analysis pipeline for Bulk RNA-seq data. Imports Salmon quantification via tximport, performs edgeR-based DEG analysis, and runs downstream enrichment (GO, KEGG, Reactome, Hallmark) and GSEA analyses with comprehensive visualization (PCA, volcano plots, enrichment plots).",
+      "input": [
+        {
+          "@id": "#input-salmon-metadata"
+        },
+        {
+          "@id": "#input-tx2gene"
+        },
+        {
+          "@id": "#input-quant-sf"
+        }
+      ],
+      "isBasedOn": {
+        "@id": ""
+      },
+      "keywords": [
+        "RNA-seq",
+        "bulk RNA-seq",
+        "differential expression",
+        "DEG",
+        "edgeR",
+        "enrichment",
+        "GO",
+        "KEGG",
+        "Reactome",
+        "GSEA",
+        "volcano plot",
+        "PCA"
+      ],
+      "license": {
+        "@id": "https://spdx.org/licenses/MIT"
+      },
+      "name": "Bulk RNA-seq DE Analysis Pipeline",
+      "output": [
+        {
+          "@id": "#output-deg-excel"
+        },
+        {
+          "@id": "#output-volcano-pdf"
+        },
+        {
+          "@id": "#output-pca-png"
+        },
+        {
+          "@id": "#output-enrichment-excel"
+        },
+        {
+          "@id": "#output-gsea-excel"
+        }
+      ],
+      "programmingLanguage": {
+        "@id": "#snakemake"
+      },
+      "sdPublisher": {
+        "@id": "https://hub.autopipe.org"
+      },
+      "softwareRequirements": [
+        {
+          "@id": "#r"
+        },
+        {
+          "@id": "#edger"
+        },
+        {
+          "@id": "#deseq2"
+        },
+        {
+          "@id": "#tximport"
+        },
+        {
+          "@id": "#clusterprofiler"
+        },
+        {
+          "@id": "#fgsea"
+        },
+        {
+          "@id": "#reactomepa"
+        },
+        {
+          "@id": "#ggplot2"
+        }
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "@id": "#author",
+      "@type": "Person",
+      "name": "Yeongjun Kim"
+    },
+    {
+      "@id": "#snakemake",
+      "@type": "ComputerLanguage",
+      "name": "Snakemake",
+      "url": "https://snakemake.readthedocs.io"
+    },
+    {
+      "@id": "#r",
+      "@type": "SoftwareApplication",
+      "name": "R"
+    },
+    {
+      "@id": "#edger",
+      "@type": "SoftwareApplication",
+      "name": "edgeR"
+    },
+    {
+      "@id": "#deseq2",
+      "@type": "SoftwareApplication",
+      "name": "DESeq2"
+    },
+    {
+      "@id": "#tximport",
+      "@type": "SoftwareApplication",
+      "name": "tximport"
+    },
+    {
+      "@id": "#clusterprofiler",
+      "@type": "SoftwareApplication",
+      "name": "clusterProfiler"
+    },
+    {
+      "@id": "#fgsea",
+      "@type": "SoftwareApplication",
+      "name": "fgsea"
+    },
+    {
+      "@id": "#reactomepa",
+      "@type": "SoftwareApplication",
+      "name": "ReactomePA"
+    },
+    {
+      "@id": "#ggplot2",
+      "@type": "SoftwareApplication",
+      "name": "ggplot2"
+    },
+    {
+      "@id": "#input-salmon-metadata",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/csv",
+      "name": "Salmon metadata CSV"
+    },
+    {
+      "@id": "#input-tx2gene",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/tab-separated-values",
+      "name": "tx2gene.tsv"
+    },
+    {
+      "@id": "#input-quant-sf",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/tab-separated-values",
+      "name": "Salmon quant.sf files"
+    },
+    {
+      "@id": "#output-deg-excel",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "name": "DEG result Excel"
+    },
+    {
+      "@id": "#output-volcano-pdf",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/pdf",
+      "name": "Volcano plots"
+    },
+    {
+      "@id": "#output-pca-png",
+      "@type": "FormalParameter",
+      "encodingFormat": "image/png",
+      "name": "PCA plot"
+    },
+    {
+      "@id": "#output-enrichment-excel",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "name": "DEG enrichment Excel"
+    },
+    {
+      "@id": "#output-gsea-excel",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "name": "GSEA result Excel"
+    }
+  ],
+  "version": "1.0.0"
+}

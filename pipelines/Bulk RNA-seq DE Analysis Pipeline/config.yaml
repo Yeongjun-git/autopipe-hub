@@ -1,0 +1,46 @@
+# ==============================================================================
+# Step 2: DE Analysis Configuration
+# ==============================================================================
+
+# --- Project settings ---
+project_name: "DE_results"
+
+# --- Comparison settings ---
+# Column in metadata CSV that defines groups for comparison
+group_col: "Condition"
+
+# Comparison pairs (JSON format): [["TreatmentGroup", "ControlGroup"], ...]
+comb_set: '[["ConditionA", "ConditionB"]]'
+
+# --- Organism ---
+# Options: "human" or "mouse"
+sample_organism: "human"
+
+# --- Gene ID type ---
+# Options: "SYMBOL", "ENSEMBL", "ENTREZID"
+keytype: "SYMBOL"
+
+# --- DE thresholds ---
+fc_threshold: 1
+pval_threshold: 0.05
+pval_method: "padj"
+
+# --- Normalization method ---
+# Options: "edgeR" or "DESeq2"
+norm_method: "edgeR"
+
+# --- Specific genes to highlight in volcano plots ---
+# JSON array format, e.g.: '["KRAS", "ERBB2", "TP53"]'
+specific_genes: '["KRAS", "ERBB2"]'
+
+# --- Gene set files (optional, mounted via /input) ---
+# Path to specific GMT file for custom enrichment analysis
+specific_geneset_path: ""
+
+# Path to Hallmark GMT file (overrides default organism-specific path)
+# If empty, uses /input/hallmark/h.all.v2025.1.Hs.symbols.gmt (human)
+#                or /input/hallmark/mh.all.v2025.1.Mm.symbols.gmt (mouse)
+hallmark_gmt_path: ""
+
+# --- Threads ---
+threads: 4

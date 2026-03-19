@@ -1,0 +1,67 @@
+configfile: "config.yaml"
+
+# ============================================================
+# Step 2: Differential Expression & Enrichment Analysis
+# Uses edgeR (via tximport) + clusterProfiler + fgsea
+# ============================================================
+
+rule all:
+    input:
+        "/output/de_analysis_complete.flag"
+
+rule run_de_analysis:
+    """
+    Run the full DE analysis pipeline:
+    1. Import Salmon quantification via tximport
+    2. Perform edgeR-based differential expression
+    3. Generate volcano plots, PCA
+    4. DEG-based enrichment (GO, KEGG, Reactome, Hallmark)
+    5. GSEA analysis (GO, KEGG, Reactome, Hallmark)
+    6. Specific gene set GSEA plots
+    """
+    input:
+        metadata = "/input/salmon_metadata.csv",
+        tx2gene = "/input/tx2gene.tsv",
+        run_script = "/pipeline/scripts/run_DE_analysis.R"
+    output:
+        flag = "/output/de_analysis_complete.flag"
+    params:
+        project_name = config["project_name"],
+        group_col = config["group_col"],
+        comb_set = config["comb_set"],
+        sample_organism = config["sample_organism"],
+        keytype = config["keytype"],
+        fc_threshold = config.get("fc_threshold", 1),
+        pval_threshold = config.get("pval_threshold", 0.05),
+        pval_method = config.get("pval_method", "padj"),
+        norm_method = config.get("norm_method", "edgeR"),
+        specific_genes = config.get("specific_genes", []),
+        specific_geneset = config.get("specific_geneset_path", ""),
+        hallmark_gmt = config.get("hallmark_gmt_path", "")
+    threads: config.get("threads", 4)
+    log:
+        "/output/logs/de_analysis.log"
+    shell:
+        """
+        mkdir -p /output/logs
+
+        Rscript /pipeline/scripts/run_DE_analysis.R \
+            --metadata_path "{input.metadata}" \
+            --tx2gene_path "{input.tx2gene}" \
+            --project_name "{params.project_name}" \
+            --group_col "{params.group_col}" \
+            --comb_set '{params.comb_set}' \
+            --output_dir "/output" \
+            --sample_organism "{params.sample_organism}" \
+            --keytype "{params.keytype}" \
+            --fc_threshold {params.fc_threshold} \
+            --pval_threshold {params.pval_threshold} \
+            --pval_method "{params.pval_method}" \
+            --norm_method "{params.norm_method}" \
+            --specific_genes '{params.specific_genes}' \
+            --specific_geneset "{params.specific_geneset}" \
+            --hallmark_gmt "{params.hallmark_gmt}" \
+            2>&1 | tee {log}
+
+        echo "DE analysis completed successfully at $(date)" > {output.flag}
+        """

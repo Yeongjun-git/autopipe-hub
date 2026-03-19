@@ -1,0 +1,167 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/crate/1.1"
+      }
+    },
+    {
+      "@id": "./",
+      "@type": [
+        "Dataset",
+        "SoftwareSourceCode",
+        "ComputationalWorkflow"
+      ],
+      "creator": [
+        {
+          "@id": "#author"
+        }
+      ],
+      "dateCreated": "2025-03-19",
+      "description": "Preprocessing pipeline for Bulk RNA-seq data using nf-core/rnaseq with STAR-Salmon workflow. Performs quality control, trimming, alignment (STAR), and transcript quantification (Salmon).",
+      "input": [
+        {
+          "@id": "#input-fastq-metadata"
+        },
+        {
+          "@id": "#input-fasta"
+        },
+        {
+          "@id": "#input-gtf"
+        }
+      ],
+      "isBasedOn": {
+        "@id": ""
+      },
+      "keywords": [
+        "RNA-seq",
+        "bulk RNA-seq",
+        "preprocessing",
+        "nf-core",
+        "STAR",
+        "Salmon",
+        "alignment",
+        "quantification",
+        "NGS"
+      ],
+      "license": {
+        "@id": "https://spdx.org/licenses/MIT"
+      },
+      "name": "Bulk RNA-seq Preprocessing Pipeline",
+      "output": [
+        {
+          "@id": "#output-salmon-quant"
+        },
+        {
+          "@id": "#output-tx2gene"
+        },
+        {
+          "@id": "#output-multiqc"
+        }
+      ],
+      "programmingLanguage": {
+        "@id": "#snakemake"
+      },
+      "sdPublisher": {
+        "@id": "https://hub.autopipe.org"
+      },
+      "softwareRequirements": [
+        {
+          "@id": "#nextflow"
+        },
+        {
+          "@id": "#nfcore-rnaseq"
+        },
+        {
+          "@id": "#star"
+        },
+        {
+          "@id": "#salmon"
+        },
+        {
+          "@id": "#docker"
+        }
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "@id": "#author",
+      "@type": "Person",
+      "name": "Yeongjun Kim"
+    },
+    {
+      "@id": "#snakemake",
+      "@type": "ComputerLanguage",
+      "name": "Snakemake",
+      "url": "https://snakemake.readthedocs.io"
+    },
+    {
+      "@id": "#nextflow",
+      "@type": "SoftwareApplication",
+      "name": "Nextflow"
+    },
+    {
+      "@id": "#nfcore-rnaseq",
+      "@type": "SoftwareApplication",
+      "name": "nf-core/rnaseq"
+    },
+    {
+      "@id": "#star",
+      "@type": "SoftwareApplication",
+      "name": "STAR"
+    },
+    {
+      "@id": "#salmon",
+      "@type": "SoftwareApplication",
+      "name": "Salmon"
+    },
+    {
+      "@id": "#docker",
+      "@type": "SoftwareApplication",
+      "name": "Docker"
+    },
+    {
+      "@id": "#input-fastq-metadata",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/csv",
+      "name": "FASTQ metadata CSV"
+    },
+    {
+      "@id": "#input-fasta",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/gzip",
+      "name": "Reference genome FASTA"
+    },
+    {
+      "@id": "#input-gtf",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/gzip",
+      "name": "Reference genome GTF"
+    },
+    {
+      "@id": "#output-salmon-quant",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/tab-separated-values",
+      "name": "Salmon quant.sf"
+    },
+    {
+      "@id": "#output-tx2gene",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/tab-separated-values",
+      "name": "tx2gene.tsv"
+    },
+    {
+      "@id": "#output-multiqc",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/html",
+      "name": "MultiQC report"
+    }
+  ],
+  "version": "1.0.0"
+}

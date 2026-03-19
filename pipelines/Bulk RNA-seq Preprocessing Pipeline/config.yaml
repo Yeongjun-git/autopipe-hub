@@ -1,0 +1,25 @@
+# ==============================================================================
+# Step 1: Preprocessing - nf-core/rnaseq (STAR-Salmon) Configuration
+# ==============================================================================
+
+# --- Nextflow / Pipeline version ---
+nextflow_version: "25.04.0"
+nfcore_rnaseq_version: "3.22.2"
+
+# --- Aligner ---
+# Options: star_salmon, star_rsem, hisat2
+aligner: "star_salmon"
+
+# --- Input paths (Docker mount points) ---
+# fastq_metadata.csv: nf-core samplesheet with columns: sample, fastq_1, fastq_2, strandedness
+# reference_fasta: Reference genome FASTA file
+# reference_gtf: Reference genome GTF annotation file
+# These are mounted at /input at runtime
+
+# --- Threads ---
+threads: 16
+
+# --- Extra Nextflow arguments (optional) ---
+# Add any additional nf-core/rnaseq arguments here
+# Example: "-c /input/my.config --trimmer fastp"
+extra_nextflow_args: ""

@@ -1,0 +1,59 @@
+configfile: "config.yaml"
+
+# ============================================================
+# Step 1: Bulk RNA-seq Preprocessing (nf-core/rnaseq)
+# Uses Nextflow nf-core/rnaseq pipeline with STAR-Salmon workflow
+# ============================================================
+
+rule all:
+    input:
+        "/output/preprocessing_complete.flag"
+
+rule run_nfcore_rnaseq:
+    """
+    Run nf-core/rnaseq pipeline for alignment and quantification.
+    Uses STAR aligner + Salmon quantification.
+    """
+    input:
+        metadata = "/input/fastq_metadata.csv",
+        fasta = "/input/reference_fasta",
+        gtf = "/input/reference_gtf"
+    output:
+        flag = "/output/preprocessing_complete.flag"
+    params:
+        nxf_ver = config["nextflow_version"],
+        pipeline_rev = config["nfcore_rnaseq_version"],
+        aligner = config["aligner"],
+        outdir = "/output/results",
+        extra_args = config.get("extra_nextflow_args", "")
+    threads: config.get("threads", 16)
+    log:
+        "/output/logs/nfcore_rnaseq.log"
+    shell:
+        """
+        mkdir -p /output/logs
+
+        # Run nf-core/rnaseq
+        NXF_VER={params.nxf_ver} nextflow run nf-core/rnaseq \
+            -r {params.pipeline_rev} \
+            --input {input.metadata} \
+            -profile docker \
+            --genome null \
+            --igenomes_ignore true \
+            --save_reference \
+            --outdir {params.outdir} \
+            --aligner {params.aligner} \
+            --fasta {input.fasta} \
+            --gtf {input.gtf} \
+            {params.extra_args} \
+            -resume \
+            2>&1 | tee {log}
+
+        # Create completion flag
+        if [ -d "{params.outdir}/star_salmon" ]; then
+            echo "Preprocessing completed successfully at $(date)" > {output.flag}
+        else
+            echo "ERROR: star_salmon output directory not found" >&2
+            exit 1
+        fi
+        """

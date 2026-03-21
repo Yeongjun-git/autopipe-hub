@@ -23,7 +23,7 @@
           "@id": "#author"
         }
       ],
-      "dateCreated": "2025-03-19",
+      "dateCreated": "2026-03-22",
       "description": "Differential expression analysis pipeline for Bulk RNA-seq data. Imports Salmon quantification via tximport, performs edgeR-based DEG analysis, and runs downstream enrichment (GO, KEGG, Reactome, Hallmark) and GSEA analyses with comprehensive visualization (PCA, volcano plots, enrichment plots).",
       "input": [
         {
@@ -33,12 +33,9 @@
           "@id": "#input-tx2gene"
         },
         {
-          "@id": "#input-quant-sf"
+          "@id": "#input-hallmark-gmt"
         }
       ],
-      "isBasedOn": {
-        "@id": ""
-      },
       "keywords": [
         "RNA-seq",
         "bulk RNA-seq",
@@ -88,9 +85,6 @@
           "@id": "#edger"
         },
         {
-          "@id": "#deseq2"
-        },
-        {
           "@id": "#tximport"
         },
         {
@@ -130,11 +124,6 @@
       "name": "edgeR"
     },
     {
-      "@id": "#deseq2",
-      "@type": "SoftwareApplication",
-      "name": "DESeq2"
-    },
-    {
       "@id": "#tximport",
       "@type": "SoftwareApplication",
       "name": "tximport"
@@ -172,10 +161,10 @@
       "name": "tx2gene.tsv"
     },
     {
-      "@id": "#input-quant-sf",
+      "@id": "#input-hallmark-gmt",
       "@type": "FormalParameter",
-      "encodingFormat": "text/tab-separated-values",
-      "name": "Salmon quant.sf files"
+      "encodingFormat": "text/plain",
+      "name": "Hallmark/Custom gene set GMT"
     },
     {
       "@id": "#output-deg-excel",
@@ -208,5 +197,5 @@
       "name": "GSEA result Excel"
     }
   ],
-  "version": "1.0.0"
+  "version": "2.0.0"
 }

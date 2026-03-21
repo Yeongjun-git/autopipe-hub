@@ -9,8 +9,8 @@ project_name: "DE_results"
 # Column in metadata CSV that defines groups for comparison
 group_col: "Condition"
 
-# Comparison pairs (JSON format): [["TreatmentGroup", "ControlGroup"], ...]
-comb_set: '[["ConditionA", "ConditionB"]]'
+# Comparison pairs: "GroupA,GroupB" (semicolon-separated for multiple)
+comb_set: "ConditionA,ConditionB"
 
 # --- Organism ---
 # Options: "human" or "mouse"
@@ -30,14 +30,14 @@ pval_method: "padj"
 norm_method: "edgeR"
 
 # --- Specific genes to highlight in volcano plots ---
-# JSON array format, e.g.: '["KRAS", "ERBB2", "TP53"]'
-specific_genes: '["KRAS", "ERBB2"]'
+# Comma-separated, e.g.: "KRAS,ERBB2,TP53"
+specific_genes: "KRAS,ERBB2"
 
 # --- Gene set files (optional, mounted via /input) ---
 # Path to specific GMT file for custom enrichment analysis
 specific_geneset_path: ""
 
-# Path to Hallmark GMT file (overrides default organism-specific path)
+# Path to Hallmark GMT file
 # If empty, uses /input/hallmark/h.all.v2025.1.Hs.symbols.gmt (human)
 #                or /input/hallmark/mh.all.v2025.1.Mm.symbols.gmt (mouse)
 hallmark_gmt_path: ""

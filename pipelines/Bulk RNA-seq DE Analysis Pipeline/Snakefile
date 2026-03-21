@@ -21,8 +21,7 @@ rule run_de_analysis:
     """
     input:
         metadata = "/input/salmon_metadata.csv",
-        tx2gene = "/input/tx2gene.tsv",
-        run_script = "/pipeline/scripts/run_DE_analysis.R"
+        tx2gene = "/input/tx2gene.tsv"
     output:
         flag = "/output/de_analysis_complete.flag"
     params:
@@ -35,7 +34,7 @@ rule run_de_analysis:
         pval_threshold = config.get("pval_threshold", 0.05),
         pval_method = config.get("pval_method", "padj"),
         norm_method = config.get("norm_method", "edgeR"),
-        specific_genes = config.get("specific_genes", []),
+        specific_genes = config.get("specific_genes", ""),
         specific_geneset = config.get("specific_geneset_path", ""),
         hallmark_gmt = config.get("hallmark_gmt_path", "")
     threads: config.get("threads", 4)

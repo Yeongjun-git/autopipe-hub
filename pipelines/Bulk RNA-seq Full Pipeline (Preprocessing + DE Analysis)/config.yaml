@@ -1,0 +1,73 @@
+# ============================================================
+# Bulk RNA-seq Pipeline Configuration
+# ============================================================
+# IMPORTANT: Use /input and /output as Docker mount points.
+# - /input: raw data directory (FASTQ files, references) — mounted read-only
+# - /output: results directory — mounted read-write
+# ============================================================
+
+# --- Step 1: Preprocessing (nf-core/rnaseq) ---
+preprocessing:
+  # Path to sample sheet CSV (columns: sample, fastq_1, fastq_2, strandedness)
+  input_csv: "/input/fastq_metadata.csv"
+  
+  # Nextflow custom config file
+  nextflow_config: "/pipeline/nextflow.config"
+  
+  # Nextflow and nf-core/rnaseq versions
+  nxf_version: "25.04.0"
+  nfcore_revision: "3.22.2"
+  
+  # Aligner choice: star_salmon (default), star_rsem, hisat2
+  aligner: "star_salmon"
+  
+  # Reference genome files (REQUIRED - provide your own)
+  fasta: "/input/reference/genome.fa"        # e.g., Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa
+  gtf: "/input/reference/genes.gtf"          # e.g., Homo_sapiens.GRCh38.112.gtf
+  
+  # Preprocessing output directory
+  outdir: "/output/1_Preprocessing"
+
+# --- Step 2: Differential Expression Analysis ---
+de_analysis:
+  # R wrapper script (inside container)
+  run_script: "/pipeline/run_de_analysis.R"
+  
+  # Salmon metadata CSV (columns: sample, file, <group_col>, Batch)
+  # 'file' column should point to quant.sf files from preprocessing output
+  metadata_csv: "/input/salmon_metadata.csv"
+  
+  # Project output folder name (will be created under outdir)
+  project_name: "DEG_result"
+  
+  # Column in metadata_csv specifying the comparison groups
+  group_col: "Condition"
+  
+  # Pairwise comparison(s): "GroupA,GroupB;GroupC,GroupD" format
+  # Each semicolon-separated pair is one contrast (first = treatment, second = control)
+  comb_set: "ConditionA,ConditionB"
+  
+  # Path to tx2gene.tsv from preprocessing step
+  tx2gene_path: "/output/1_Preprocessing/star_salmon/tx2gene.tsv"
+  
+  # Organism: "human" or "mouse"
+  organism: "human"
+  
+  # Gene ID type in metadata: SYMBOL, ENSEMBL, or ENTREZID
+  keytype: "SYMBOL"
+  
+  # DEG thresholds
+  fc_threshold: 1       # log2 fold change cutoff
+  pval_threshold: 0.05  # adjusted p-value cutoff
+  
+  # (Optional) Custom gene set GMT file path
+  specific_geneset: "/input/reference/custom_geneset.gmt"
+  
+  # (Optional) Genes to highlight on volcano plot
+  specific_genes: "KRAS,ERBB2"
+  
+  # (Optional) Hallmark gene set GMT path
+  hallmark_path: "/input/reference/hallmark.gmt"
+  
+  # DE analysis output directory
+  outdir: "/output/2_DE_Analysis"

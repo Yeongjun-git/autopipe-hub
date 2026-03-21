@@ -1,0 +1,126 @@
+configfile: "config.yaml"
+
+import os
+
+# ============================================================
+# Bulk RNA-seq Pipeline: Preprocessing + DE Analysis
+# Step 1: nf-core/rnaseq (STAR-Salmon) preprocessing
+# Step 2: edgeR DEG + enrichment + GSEA in R
+# ============================================================
+
+# --- Config ---
+PREPROCESSING_INPUT_CSV = config["preprocessing"]["input_csv"]
+NEXTFLOW_CONFIG = config["preprocessing"]["nextflow_config"]
+NXF_VERSION = config["preprocessing"]["nxf_version"]
+NFCORE_REVISION = config["preprocessing"]["nfcore_revision"]
+ALIGNER = config["preprocessing"]["aligner"]
+FASTA = config["preprocessing"]["fasta"]
+GTF = config["preprocessing"]["gtf"]
+
+PREPROCESSING_OUTDIR = config["preprocessing"]["outdir"]
+
+DE_SCRIPT = config["de_analysis"]["run_script"]
+DE_METADATA = config["de_analysis"]["metadata_csv"]
+PROJECT_NAME = config["de_analysis"]["project_name"]
+GROUP_COL = config["de_analysis"]["group_col"]
+COMB_SET = config["de_analysis"]["comb_set"]
+TX2GENE_PATH = config["de_analysis"]["tx2gene_path"]
+SAMPLE_ORGANISM = config["de_analysis"]["organism"]
+KEYTYPE = config["de_analysis"]["keytype"]
+FC_THRESHOLD = config["de_analysis"]["fc_threshold"]
+PVAL_THRESHOLD = config["de_analysis"]["pval_threshold"]
+SPECIFIC_GENESET = config["de_analysis"].get("specific_geneset", "")
+SPECIFIC_GENES = config["de_analysis"].get("specific_genes", [])
+HALLMARK_PATH = config["de_analysis"].get("hallmark_path", "")
+
+DE_OUTDIR = config["de_analysis"]["outdir"]
+
+# --- Final output targets ---
+rule all:
+    input:
+        os.path.join(PREPROCESSING_OUTDIR, "star_salmon", "tx2gene.tsv"),
+        os.path.join(DE_OUTDIR, PROJECT_NAME, "PCA_plot.png")
+
+# ============================================================
+# Step 1: Preprocessing with nf-core/rnaseq
+# ============================================================
+rule preprocessing:
+    input:
+        csv = PREPROCESSING_INPUT_CSV,
+        fasta = FASTA,
+        gtf = GTF
+    output:
+        tx2gene = os.path.join(PREPROCESSING_OUTDIR, "star_salmon", "tx2gene.tsv")
+    params:
+        nxf_ver = NXF_VERSION,
+        revision = NFCORE_REVISION,
+        aligner = ALIGNER,
+        outdir = PREPROCESSING_OUTDIR,
+        nf_config = NEXTFLOW_CONFIG
+    log:
+        os.path.join(PREPROCESSING_OUTDIR, "nf-core_rnaseq.log")
+    threads: workflow.cores
+    shell:
+        """
+        NXF_VER={params.nxf_ver} nextflow run nf-core/rnaseq \
+            -r {params.revision} \
+            --input {input.csv} \
+            -profile docker \
+            --genome null \
+            -c {params.nf_config} \
+            --igenomes_ignore true \
+            --save_reference \
+            --outdir '{params.outdir}' \
+            --aligner '{params.aligner}' \
+            --fasta '{input.fasta}' \
+            --gtf '{input.gtf}' \
+            -resume \
+            2>&1 | tee {log}
+        """
+
+# ============================================================
+# Step 2: DE Analysis (edgeR + enrichment + GSEA)
+# ============================================================
+rule de_analysis:
+    input:
+        tx2gene = os.path.join(PREPROCESSING_OUTDIR, "star_salmon", "tx2gene.tsv"),
+        metadata = DE_METADATA,
+        script_dir = "R_scripts"
+    output:
+        pca = os.path.join(DE_OUTDIR, PROJECT_NAME, "PCA_plot.png")
+    params:
+        de_outdir = DE_OUTDIR,
+        project_name = PROJECT_NAME,
+        group_col = GROUP_COL,
+        comb_set = COMB_SET,
+        tx2gene_path = TX2GENE_PATH,
+        metadata_path = DE_METADATA,
+        organism = SAMPLE_ORGANISM,
+        keytype = KEYTYPE,
+        fc = FC_THRESHOLD,
+        pval = PVAL_THRESHOLD,
+        specific_geneset = SPECIFIC_GENESET,
+        specific_genes = SPECIFIC_GENES,
+        hallmark_path = HALLMARK_PATH
+    log:
+        os.path.join(DE_OUTDIR, "de_analysis.log")
+    threads: 1
+    shell:
+        """
+        Rscript /pipeline/run_de_analysis.R \
+            --script_dir /pipeline/R_scripts \
+            --root_path {params.de_outdir}/ \
+            --project_name '{params.project_name}' \
+            --group_col '{params.group_col}' \
+            --comb_set '{params.comb_set}' \
+            --tx2gene_path '{input.tx2gene}' \
+            --metadata_path '{input.metadata}' \
+            --organism '{params.organism}' \
+            --keytype '{params.keytype}' \
+            --fc {params.fc} \
+            --pval {params.pval} \
+            --specific_geneset '{params.specific_geneset}' \
+            --specific_genes '{params.specific_genes}' \
+            --hallmark_path '{params.hallmark_path}' \
+            2>&1 | tee {log}
+        """

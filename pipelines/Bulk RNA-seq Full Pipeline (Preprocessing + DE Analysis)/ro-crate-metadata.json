@@ -1,0 +1,287 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/crate/1.1"
+      }
+    },
+    {
+      "@id": "./",
+      "@type": [
+        "Dataset",
+        "SoftwareSourceCode",
+        "ComputationalWorkflow"
+      ],
+      "creator": [
+        {
+          "@id": "#author"
+        }
+      ],
+      "dateCreated": "2026-03-22",
+      "description": "A two-step bulk RNA-seq analysis pipeline: (1) Preprocessing using nf-core/rnaseq with STAR-Salmon workflow for alignment and quantification, (2) Differential expression analysis using edgeR with downstream GO/KEGG/Reactome/Hallmark enrichment, GSEA, PCA, and volcano plot visualization.",
+      "input": [
+        {
+          "@id": "#input-fastq-metadata"
+        },
+        {
+          "@id": "#input-fasta"
+        },
+        {
+          "@id": "#input-gtf"
+        },
+        {
+          "@id": "#input-salmon-metadata"
+        },
+        {
+          "@id": "#input-hallmark-gmt"
+        }
+      ],
+      "isBasedOn": {
+        "@id": ""
+      },
+      "keywords": [
+        "RNA-seq",
+        "bulk RNA-seq",
+        "preprocessing",
+        "differential expression",
+        "DEG",
+        "edgeR",
+        "STAR",
+        "Salmon",
+        "nf-core",
+        "enrichment",
+        "GSEA",
+        "GO",
+        "KEGG",
+        "Reactome",
+        "volcano plot",
+        "PCA",
+        "transcriptomics",
+        "bioinformatics"
+      ],
+      "license": {
+        "@id": "https://spdx.org/licenses/MIT"
+      },
+      "name": "Bulk RNA-seq Full Pipeline (Preprocessing + DE Analysis)",
+      "output": [
+        {
+          "@id": "#output-salmon-quant"
+        },
+        {
+          "@id": "#output-tx2gene"
+        },
+        {
+          "@id": "#output-multiqc"
+        },
+        {
+          "@id": "#output-deg-excel"
+        },
+        {
+          "@id": "#output-volcano-pdf"
+        },
+        {
+          "@id": "#output-pca-png"
+        },
+        {
+          "@id": "#output-enrichment-excel"
+        },
+        {
+          "@id": "#output-gsea-excel"
+        }
+      ],
+      "programmingLanguage": {
+        "@id": "#snakemake"
+      },
+      "sdPublisher": {
+        "@id": "https://hub.autopipe.org"
+      },
+      "softwareRequirements": [
+        {
+          "@id": "#nextflow"
+        },
+        {
+          "@id": "#nfcore-rnaseq"
+        },
+        {
+          "@id": "#star"
+        },
+        {
+          "@id": "#salmon"
+        },
+        {
+          "@id": "#r"
+        },
+        {
+          "@id": "#edger"
+        },
+        {
+          "@id": "#tximport"
+        },
+        {
+          "@id": "#clusterprofiler"
+        },
+        {
+          "@id": "#fgsea"
+        },
+        {
+          "@id": "#reactomepa"
+        },
+        {
+          "@id": "#ggplot2"
+        }
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "@id": "#author",
+      "@type": "Person",
+      "name": "Yeongjun Kim"
+    },
+    {
+      "@id": "#snakemake",
+      "@type": "ComputerLanguage",
+      "name": "Snakemake",
+      "url": "https://snakemake.readthedocs.io"
+    },
+    {
+      "@id": "#nextflow",
+      "@type": "SoftwareApplication",
+      "name": "Nextflow"
+    },
+    {
+      "@id": "#nfcore-rnaseq",
+      "@type": "SoftwareApplication",
+      "name": "nf-core/rnaseq"
+    },
+    {
+      "@id": "#star",
+      "@type": "SoftwareApplication",
+      "name": "STAR"
+    },
+    {
+      "@id": "#salmon",
+      "@type": "SoftwareApplication",
+      "name": "Salmon"
+    },
+    {
+      "@id": "#r",
+      "@type": "SoftwareApplication",
+      "name": "R"
+    },
+    {
+      "@id": "#edger",
+      "@type": "SoftwareApplication",
+      "name": "edgeR"
+    },
+    {
+      "@id": "#tximport",
+      "@type": "SoftwareApplication",
+      "name": "tximport"
+    },
+    {
+      "@id": "#clusterprofiler",
+      "@type": "SoftwareApplication",
+      "name": "clusterProfiler"
+    },
+    {
+      "@id": "#fgsea",
+      "@type": "SoftwareApplication",
+      "name": "fgsea"
+    },
+    {
+      "@id": "#reactomepa",
+      "@type": "SoftwareApplication",
+      "name": "ReactomePA"
+    },
+    {
+      "@id": "#ggplot2",
+      "@type": "SoftwareApplication",
+      "name": "ggplot2"
+    },
+    {
+      "@id": "#input-fastq-metadata",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/csv",
+      "name": "FASTQ metadata CSV"
+    },
+    {
+      "@id": "#input-fasta",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/gzip",
+      "name": "Reference genome FASTA"
+    },
+    {
+      "@id": "#input-gtf",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/gzip",
+      "name": "Reference genome GTF"
+    },
+    {
+      "@id": "#input-salmon-metadata",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/csv",
+      "name": "Salmon metadata CSV"
+    },
+    {
+      "@id": "#input-hallmark-gmt",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/plain",
+      "name": "Hallmark/Custom gene set GMT"
+    },
+    {
+      "@id": "#output-salmon-quant",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/tab-separated-values",
+      "name": "Salmon quant.sf"
+    },
+    {
+      "@id": "#output-tx2gene",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/tab-separated-values",
+      "name": "tx2gene.tsv"
+    },
+    {
+      "@id": "#output-multiqc",
+      "@type": "FormalParameter",
+      "encodingFormat": "text/html",
+      "name": "MultiQC report"
+    },
+    {
+      "@id": "#output-deg-excel",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "name": "DEG result Excel"
+    },
+    {
+      "@id": "#output-volcano-pdf",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/pdf",
+      "name": "Volcano plots"
+    },
+    {
+      "@id": "#output-pca-png",
+      "@type": "FormalParameter",
+      "encodingFormat": "image/png",
+      "name": "PCA plot"
+    },
+    {
+      "@id": "#output-enrichment-excel",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "name": "DEG enrichment Excel and figures"
+    },
+    {
+      "@id": "#output-gsea-excel",
+      "@type": "FormalParameter",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "name": "GSEA result Excel and figures"
+    }
+  ],
+  "version": "1.0.0"
+}
